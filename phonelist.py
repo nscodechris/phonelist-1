@@ -54,7 +54,7 @@ while True: ## REPL - Read Execute Program Loop
     print("-------------------------------------------------")
 
     
-    cmd = input("Command: ")
+    cmd = input("Command: ").upper()
     if cmd == "LIST":
         print(read_phonelist(conn))
     elif cmd == "ADD":
