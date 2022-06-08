@@ -2,27 +2,46 @@
 from art import *
 import psycopg2
 import pandas as pd
+from tabulate import tabulate
+
 conn = psycopg2.connect(
  host="localhost",
  database="phone",
  user="postgres",
  password="Cvmillan10!?")
 
+query_select_all = '''
+SELECT * FROM phonelist;
+'''
+
+
 
 
 def read_phonelist(C):
-    cur = C.cursor()
-    cur.execute("SELECT * FROM phonelist;")
-    rows = cur.fetchall()
-    cur.close()
-    return rows
+    df = pd.read_sql_query(query_select_all, C)
+    # Setting "name_id" as index, just to have a nicer and cleaner look
+
+    #df.set_index("id", inplace=True)
+    display_df = df[df.columns[0:4]]
+    print(tabulate(display_df, showindex=False, headers=display_df.columns))
+    # print(df[df.columns[0:3]])
+    # df.reset_index(inplace=True)
+    print("----------" * 10)
+    input("This is the current list, press enter to continue:")
+    print("----------" * 10)
+    
+    # cur = C.cursor()
+    # cur.execute("SELECT * FROM phonelist;")
+    # rows = cur.fetchall()
+    # cur.close()
+    # return rows
 def add_phone(C, name, phone, address):
     cur = C.cursor()
     cur.execute(f"INSERT INTO phonelist VALUES ('{name}', '{phone}', '{address}');")
     cur.close()
-def delete_phone(C, name):
+def delete_phone(C, id_contact):
     cur = C.cursor()
-    cur.execute(f"DELETE FROM phonelist WHERE name = '{name}';")
+    cur.execute(f"DELETE FROM phonelist WHERE id = '{id_contact}';")
     cur.close()
 def save_phonelist(C):
     cur = C.cursor()
@@ -58,15 +77,16 @@ while True: ## REPL - Read Execute Program Loop
     
     cmd = input("Command: ").upper()
     if cmd == "LIST":
-        print(read_phonelist(conn))
+        read_phonelist(conn)
+        # print(read_phonelist(conn))
     elif cmd == "ADD":
         name = input("  Name: ")
         phone = input("  Phone: ")
         address = input(" Address: ")
         add_phone(conn, name, phone, address)
     elif cmd == "DELETE":
-        name = input("  Name: ")
-        delete_phone(conn, name)
+        id_contact = input("  id: ")
+        delete_phone(conn, id_contact)
     elif cmd == "QUIT":
         save_phonelist(conn)
         exit()
