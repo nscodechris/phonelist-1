@@ -1,6 +1,7 @@
 
-
+from art import *
 import psycopg2
+import pandas as pd
 conn = psycopg2.connect(
  host="localhost",
  database="phone",
@@ -32,6 +33,27 @@ def save_phonelist(C):
     cur.close()
 
 while True: ## REPL - Read Execute Program Loop
+    print('''
+              ''')
+    print("---------------------------------------------------------")
+    tprint("The Phone List")
+    print("---------------------------------------------------------")
+    dots = ":     "
+    name_dot = "Welcome to Phone List" + dots
+
+    start_up = {name_dot: [""],
+                "#": ["1", "2", "3", "4"],
+                "Options": ["List - list all phone numbers",
+                "Add - add a phone number",
+                "Delete - delete a contact",
+                "Quit - quit the program"]
+                }
+    start = pd.DataFrame(start_up, index=["", "", "", ""])
+    print("-------------------------------------------------")
+    print(start)
+    print("-------------------------------------------------")
+
+    
     cmd = input("Command: ")
     if cmd == "LIST":
         print(read_phonelist(conn))
