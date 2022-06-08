@@ -42,13 +42,14 @@ while True: ## REPL - Read Execute Program Loop
     name_dot = "Welcome to Phone List" + dots
 
     start_up = {name_dot: [""],
-                "#": ["1", "2", "3", "4"],
+                "#": ["1", "2", "3", "4", "5"],
                 "Options": ["List - list all phone numbers",
                 "Add - add a phone number",
                 "Delete - delete a contact",
-                "Quit - quit the program"]
+                "Quit - quit the program",
+                "Save - saves the entries"]
                 }
-    start = pd.DataFrame(start_up, index=["", "", "", ""])
+    start = pd.DataFrame(start_up, index=["", "", "", "", ""])
     print("-------------------------------------------------")
     print(start)
     print("-------------------------------------------------")
@@ -67,6 +68,8 @@ while True: ## REPL - Read Execute Program Loop
     elif cmd == "QUIT":
         save_phonelist(conn)
         exit()
+    elif cmd == "SAVE":
+        save_phonelist(conn)
     else:
         print("Command is unknown!!")
         
